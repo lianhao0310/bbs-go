@@ -10,7 +10,10 @@
 
 付费是为了项目能够更好的生存下去，请谅解。项目将一如既往的开源下去~
 
-联系QQ：`471243194`
+- 联系QQ：`471243194`
+- 微信：
+- ![](https://s2.loli.net/2022/03/01/ojufvSrGF8PQq14.jpg)
+
 
 | 服务     | 价格  | 服务内容                                         |
 | -------- | ----- | ------------------------------------------------ |
@@ -18,15 +21,6 @@
 | 商用授权 | ￥628 | 提供bbs-go商业使用授权                             |
 | 付费咨询 | 面议  | 付费答疑解惑，协助解决问题                       |
 | 功能定制 | 面议  | 接受各种功能定制，只有你想不到的没有我们做不到的 |
-
-## 课程
-
-**`bbs-go`搭建课程上线啦，快来跟着我一步步搭建属于你的bbs吧。该课程会带领大家一步步的了解并熟悉Go语言开发，如果你是一个Go语言初学者，或者正准备学习Go语言，那么这个课程非常适合你。如果你熟练掌握了本课程中的知识点，相信你就已经入门Go语言开发，并能胜任日常的开发工作了。**
-
-- 课程地址：[https://www.shiyanlou.com/courses/1436](https://www.shiyanlou.com/courses/1436)
-- 9折优惠邀请码： `ZHwfIjb1`
-
-Go 是非常年轻的一门语言，它的主要目标是`兼具Python等动态语言的开发速度和 C/C++ 等编译型语言的性能与安全性`。Go 语言发布以来更是受到中国开发者的青睐，头条、七牛、360、腾讯、阿里等大厂的重要服务都开始使用Go语言构建，国内的Go语言研发岗位的薪水也是很可观的。 
 
 ## 介绍
 
@@ -41,21 +35,27 @@ Go 是非常年轻的一门语言，它的主要目标是`兼具Python等动态�
 > 基于`Golang`搭建，提供接口数据支撑。
 
 *技术栈*
-- iris (https://github.com/kataras/iris) Go 语言 mvc 框架
-- gorm (http://gorm.io/) Go 语言 orm 框架
-- Nuxt.js （https://nuxtjs.org/） 基于Vue.js的服务端页面渲染框架，简单、好用、功能强大
-- resty (https://github.com/go-resty/resty) Go 语言好用的 http-client
-- cron (https://github.com/robfig/cron) 定时任务
-- goquery (https://github.com/PuerkitoBio/goquery) html dom 元素解析
+- iris ([https://github.com/kataras/iris](https://github.com/kataras/iris)) Go语言 mvc 框架
+- gorm ([http://gorm.io/](http://gorm.io/)) 最好用的Go语言数据库orm框架
+- resty ([https://github.com/go-resty/resty](https://github.com/go-resty/resty)) Go语言好用的 http-client
+- cron ([https://github.com/robfig/cron](https://github.com/robfig/cron)) 定时任务框架
+- goquery ([https://github.com/PuerkitoBio/goquery](https://github.com/PuerkitoBio/goquery)) html dom 元素解析
 
 ### site
 
 > 前端页面渲染服务，基于`nuxt.js`搭建。
 
 *技术栈*
-- Nuxt.js (https://nuxtjs.org) 基于 Vue 的服务端渲染框架
-- Element-UI (https://element.eleme.cn) 饿了么开源的基于 vue.js 的前端库
-- Vditor (https://github.com/Vanessa219/vditor) Markdown 编辑器
+- vue.js ([https://vuejs.org](https://vuejs.org)) 渐进式 JavaScript 框架
+- nuxt.js ([https://nuxtjs.org](https://nuxtjs.org)) 基于Vue的服务端渲染框架，效率高到爆
+
+### admin
+
+> 管理后台系统，基于`vue.js + element-ui`搭建。
+
+*技术栈*
+- vue.js ([https://vuejs.org](https://vuejs.org)) 渐进式 JavaScript 框架
+- element-ui ([https://element.eleme.cn](https://element.eleme.cn)) 饿了么开源的基于 vue.js 的前端库
 
 ## 功能预览
 

@@ -111,6 +111,7 @@
         </article>
       </div>
       <div class="right-container">
+        <user-info :user="article.user" />
         <!-- 展示广告 -->
         <adsbygoogle ad-slot="1742173616" />
 
@@ -179,7 +180,7 @@ export default {
     }
     const [commentsPage, favorited, nearlyArticles, relatedArticles] =
       await Promise.all([
-        $axios.get('/api/comment/list', {
+        $axios.get('/api/comment/comments', {
           params: {
             entityType: 'article',
             entityId: article.articleId,

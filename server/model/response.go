@@ -1,6 +1,10 @@
 package model
 
-import "bbs-go/model/constants"
+import (
+	"bbs-go/model/constants"
+
+	"github.com/mlogclub/simple"
+)
 
 // UserInfo 用户简单信息
 type UserInfo struct {
@@ -25,7 +29,6 @@ type UserDetail struct {
 	Username             string `json:"username"`
 	BackgroundImage      string `json:"backgroundImage"`
 	SmallBackgroundImage string `json:"smallBackgroundImage"`
-	Type                 int    `json:"type"`
 	HomePage             string `json:"homePage"`
 	Forbidden            bool   `json:"forbidden"` // 是否禁言
 	Status               int    `json:"status"`
@@ -122,16 +125,20 @@ type ProjectResponse struct {
 
 // CommentResponse 评论返回数据
 type CommentResponse struct {
-	CommentId  int64            `json:"commentId"`
-	User       *UserInfo        `json:"user"`
-	EntityType string           `json:"entityType"`
-	EntityId   int64            `json:"entityId"`
-	Content    string           `json:"content"`
-	ImageList  []ImageInfo      `json:"imageList"`
-	QuoteId    int64            `json:"quoteId"`
-	Quote      *CommentResponse `json:"quote"`
-	Status     int              `json:"status"`
-	CreateTime int64            `json:"createTime"`
+	CommentId    int64                `json:"commentId"`
+	User         *UserInfo            `json:"user"`
+	EntityType   string               `json:"entityType"`
+	EntityId     int64                `json:"entityId"`
+	Content      string               `json:"content"`
+	ImageList    []ImageInfo          `json:"imageList"`
+	LikeCount    int64                `json:"likeCount"`
+	CommentCount int64                `json:"commentCount"`
+	Liked        bool                 `json:"liked"`
+	QuoteId      int64                `json:"quoteId"`
+	Quote        *CommentResponse     `json:"quote"`
+	Replies      *simple.CursorResult `json:"replies"`
+	Status       int                  `json:"status"`
+	CreateTime   int64                `json:"createTime"`
 }
 
 // 收藏返回数据

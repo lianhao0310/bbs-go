@@ -9,9 +9,9 @@ const adminRouter = [
     redirect: "/users",
     children: [
       {
+        name: "Users",
         path: "",
         component: () => import("@/views/pages/users/index"),
-        name: "users",
         meta: {
           title: "用户管理",
           icon: "iconfont icon-username",
@@ -30,27 +30,27 @@ const adminRouter = [
     },
     children: [
       {
+        name: "Topics",
         path: "topics",
         component: () => import("@/views/pages/topics/index"),
-        name: "topics",
         meta: {
           title: "话题",
           icon: "iconfont icon-topic",
         },
       },
       {
+        name: "Articles",
         path: "articles",
         component: () => import("@/views/pages/articles/index"),
-        name: "articles",
         meta: {
           title: "文章",
           icon: "iconfont icon-article",
         },
       },
       {
+        name: "Comments",
         path: "comments",
         component: () => import("@/views/pages/comments/index"),
-        name: "comments",
         meta: {
           title: "评论",
           icon: "iconfont icon-comments",
@@ -69,18 +69,18 @@ const adminRouter = [
     },
     children: [
       {
+        name: "Nodes",
         path: "nodes",
         component: () => import("@/views/pages/topics/nodes"),
-        name: "nodes",
         meta: {
           title: "节点",
           icon: "iconfont icon-tag",
         },
       },
       {
+        name: "Tags",
         path: "tags",
         component: () => import("@/views/pages/tags/index"),
-        name: "tags",
         meta: {
           title: "标签",
           icon: "iconfont icon-tags",
@@ -94,9 +94,9 @@ const adminRouter = [
     redirect: "/links",
     children: [
       {
+        name: "Links",
         path: "",
         component: () => import("@/views/pages/links/index"),
-        name: "links",
         meta: {
           title: "友情链接",
           icon: "iconfont icon-link",

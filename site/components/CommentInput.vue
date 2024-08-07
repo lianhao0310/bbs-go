@@ -15,21 +15,11 @@
           placeholder="请发表你的观点..."
           @submit="create"
         />
-        <simple-editor
+        <text-editor
           v-else
           ref="simpleEditor"
           v-model="value"
-          :max-word-count="500"
-          height="150px"
           @submit="create"
-        />
-      </div>
-      <div class="comment-button-wrapper">
-        <span>Ctrl or ⌘ + Enter</span>
-        <button
-          class="button is-small is-success"
-          @click="create"
-          v-text="btnName"
         />
       </div>
     </div>
@@ -72,11 +62,13 @@ export default {
       return this.$store.state.user.current
     },
     inputMode() {
-      if (this.$store.state.env.isMobile) {
-        // 手机中，强制使用普通文本编辑器
-        return 'text'
-      }
-      return this.mode
+      // if (this.$store.state.env.isMobile) {
+      //   // 手机中，强制使用普通文本编辑器
+      //   return 'text'
+      // }
+      // return this.mode
+      // 强制text模式
+      return 'text'
     },
     contentType() {
       return this.inputMode === 'markdown' ? 'markdown' : 'text'
@@ -120,6 +112,7 @@ export default {
         if (this.$refs.simpleEditor) {
           this.$refs.simpleEditor.clear()
         }
+        this.$message.success('发布成功')
       } catch (e) {
         console.error(e)
         this.$message.error(e.message || e)

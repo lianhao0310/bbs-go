@@ -2,7 +2,9 @@ package services
 
 import (
 	"bbs-go/model/constants"
+	"bbs-go/pkg/event"
 	"errors"
+
 	"github.com/mlogclub/simple/date"
 
 	"github.com/mlogclub/simple"
@@ -93,7 +95,7 @@ func (s *userLikeService) IsLiked(userId int64, entityType string, entityIds []i
 	return
 }
 
-// 话题点赞
+// TopicLike 话题点赞
 func (s *userLikeService) TopicLike(userId int64, topicId int64) error {
 	topic := repositories.TopicRepository.Get(simple.DB(), topicId)
 	if topic == nil || topic.Status != constants.StatusOk {
@@ -110,8 +112,39 @@ func (s *userLikeService) TopicLike(userId int64, topicId int64) error {
 		return err
 	}
 
-	// 发送消息
-	MessageService.SendTopicLikeMsg(topicId, userId)
+	// 发送事件
+	event.Send(event.UserLikeEvent{
+		UserId:     userId,
+		EntityId:   topicId,
+		EntityType: constants.EntityTopic,
+	})
+
+	return nil
+}
+
+// CommentLike 话题点赞
+func (s *userLikeService) CommentLike(userId int64, commentId int64) error {
+	comment := repositories.CommentRepository.Get(simple.DB(), commentId)
+	if comment == nil || comment.Status != constants.StatusOk {
+		return errors.New("评论不存在")
+	}
+
+	if err := simple.DB().Transaction(func(tx *gorm.DB) error {
+		if err := s.like(tx, userId, constants.EntityComment, commentId); err != nil {
+			return err
+		}
+		// 更新点赞数
+		return repositories.CommentRepository.UpdateColumn(tx, commentId, "like_count", gorm.Expr("like_count + 1"))
+	}); err != nil {
+		return err
+	}
+
+	// 发送事件
+	event.Send(event.UserLikeEvent{
+		UserId:     userId,
+		EntityId:   commentId,
+		EntityType: constants.EntityComment,
+	})
 
 	return nil
 }

@@ -6,7 +6,7 @@
       v-slot="{ results }"
       :init-data="commentsPage"
       :params="{ entityType: entityType, entityId: entityId }"
-      url="/api/comment/list"
+      url="/api/comment/comments"
     >
       <div v-for="comment in results" :key="comment.commentId" class="comment">
         <div class="comment-item-left">
@@ -48,9 +48,14 @@
             </div>
           </div>
           <div class="comment-actions">
-            <div class="comment-action-item">
+            <div
+              class="comment-action-item"
+              :class="{ active: comment.liked }"
+              @click="like(comment)"
+            >
               <i class="iconfont icon-like"></i>
-              <span>点赞</span>
+              <span>{{ comment.liked ? '已赞' : '点赞' }}</span>
+              <span v-if="comment.likeCount > 0">{{ comment.likeCount }}</span>
             </div>
             <div
               class="comment-action-item"
@@ -65,10 +70,25 @@
           </div>
           <div
             v-if="reply.commentId === comment.commentId"
-            class="comment-reply"
+            class="comment-reply-form"
           >
-            <simple-editor height="120px" />
+            <text-editor
+              :ref="`editor${comment.commentId}`"
+              v-model="reply.value"
+              :height="100"
+              @submit="submitReply(comment)"
+            />
           </div>
+          <sub-comment-list
+            v-if="
+              comment.replies &&
+              comment.replies.results &&
+              comment.replies.results.length
+            "
+            :comment-id="comment.commentId"
+            :data="comment.replies"
+            @reply="onReply(comment, $event)"
+          />
         </div>
       </div>
     </load-more>
@@ -76,7 +96,9 @@
 </template>
 
 <script>
+import SubCommentList from './SubCommentList.vue'
 export default {
+  components: { SubCommentList },
   props: {
     entityType: {
       type: String,
@@ -100,7 +122,10 @@ export default {
       showReplyCommentId: 0,
       reply: {
         commentId: 0,
-        content: '',
+        value: {
+          content: '',
+          imageList: [],
+        },
       },
     }
   },
@@ -118,16 +143,73 @@ export default {
         this.$refs.commentsLoadMore.unshiftResults(data)
       }
     },
+    async like(comment) {
+      try {
+        await this.$axios.post(`/api/comment/like/${comment.commentId}`)
+        comment.liked = true
+        comment.likeCount = comment.likeCount + 1
+        this.$message.success('点赞成功')
+      } catch (e) {
+        if (e.errorCode === 1) {
+          this.$msgSignIn()
+        } else {
+          this.$message.error(e.message || e)
+        }
+      }
+    },
     switchShowReply(comment) {
+      if (!this.user) {
+        this.$msgSignIn()
+        return
+      }
+
       if (this.reply.commentId === comment.commentId) {
         this.hideReply(comment)
       } else {
         this.reply.commentId = comment.commentId
+        setTimeout(() => {
+          this.$refs[`editor${comment.commentId}`][0].focus()
+        }, 0)
       }
     },
     hideReply(comment) {
       this.reply.commentId = 0
-      this.reply.content = ''
+      this.reply.value.content = ''
+      this.reply.value.imageList = []
+    },
+    async submitReply(parent) {
+      try {
+        const ret = await this.$axios.post('/api/comment/create', {
+          entityType: 'comment',
+          entityId: parent.commentId,
+          content: this.reply.value.content,
+          imageList:
+            this.reply.value.imageList && this.reply.value.imageList.length
+              ? JSON.stringify(this.reply.value.imageList)
+              : '',
+        })
+        this.hideReply()
+        this.appendReply(parent, ret)
+        this.$message.success('发布成功')
+      } catch (e) {
+        if (e.errorCode === 1) {
+          this.$msgSignIn()
+        } else {
+          this.$message.error(e.message || e)
+        }
+      }
+    },
+    onReply(parent, comment) {
+      this.appendReply(parent, comment)
+    },
+    appendReply(parent, comment) {
+      if (parent.replies && parent.replies.results) {
+        parent.replies.results.push(comment)
+      } else {
+        parent.replies = {
+          results: [comment],
+        }
+      }
     },
   },
 }
@@ -135,10 +217,12 @@ export default {
 
 <style scoped lang="scss">
 .comments {
-  padding: 20px;
+  padding: 10px;
+  font-size: 14px;
+
   .comment {
     display: flex;
-    padding: 16px 0;
+    padding: 10px 0;
 
     &:not(:last-child) {
       border-bottom: 1px solid var(--border-color);
@@ -152,7 +236,7 @@ export default {
         display: flex;
         justify-content: space-between;
         .comment-nickname {
-          font-size: 15px;
+          font-size: 14px;
           font-weight: 600;
           color: var(--text-color);
 
@@ -162,7 +246,7 @@ export default {
         }
 
         .comment-time {
-          font-size: 14px;
+          font-size: 13px;
           color: var(--text-color3);
         }
       }
@@ -171,7 +255,7 @@ export default {
         .comment-content {
           margin-top: 10px;
           margin-bottom: 0;
-          color: var(--text-color3);
+          color: var(--text-color);
         }
         .comment-image-list {
           margin-top: 10px;
@@ -203,7 +287,7 @@ export default {
 
         .comment-action-item {
           line-height: 22px;
-          font-size: 14px;
+          font-size: 13px;
           cursor: pointer;
           color: var(--text-color3);
           user-select: none;
@@ -223,10 +307,20 @@ export default {
         }
       }
 
-      .comment-reply {
+      .comment-reply-form {
         margin-top: 10px;
       }
+
+      .comment-replies {
+        margin-top: 10px;
+        // padding: 10px;
+        background-color: var(--bg-color2);
+      }
     }
+  }
+
+  .reply {
+    display: flex;
   }
 }
 </style>
